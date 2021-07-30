@@ -3,18 +3,42 @@ import Link from 'next/link';
 import client from '@/config/apollo-client';
 import { getProfileUrl } from '@/libs/get-urls';
 import { gql } from '@apollo/client';
+import { getImageMetadata } from '@/libs/get-image-url';
 
 export default function ProfilesPage({ profiles }) {
   return (
     <Layout title="Profiles">
       <h1>Profiles</h1>
-      <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
+      <ul className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
         {profiles.map((item) => (
-          <li className="bg-gray-100 px-3 py-4 rounded-md" key={item.id}>
+          <li
+            className="py-3 rounded-md transition-shadow hover:shadow-lg"
+            key={item.id}
+          >
             <Link href={getProfileUrl(item.slug)}>
-              <a>
-                <div className="block h-16 w-16 bg-gray-600">Avarat</div>
-                <p>{item.artName}</p>
+              <a className="hover:opacity-0">
+                <p className="px-4 py-2 font-semibold text-gray-800 dark:text-gray-200">
+                  {item.artName}
+                </p>
+                {item.avatar &&
+                item.avatar.formats &&
+                item.avatar.formats.medium ? (
+                  <div
+                    className="relative overflow-hidden "
+                    style={{ paddingBottom: '100%' }}
+                  >
+                    <img
+                      style={{ height: '100%' }}
+                      className="absolute w-full h-full object-cover"
+                      src={item.avatar.formats.medium.url}
+                      alt={`Avatar của ${item.artName}`}
+                      width={getImageMetadata(item.avatar).width}
+                      height={getImageMetadata(item.avatar).height}
+                    />
+                  </div>
+                ) : (
+                  <div></div>
+                )}
               </a>
             </Link>
           </li>
@@ -31,6 +55,9 @@ export async function getServerSideProps() {
         profiles {
           artName
           slug
+          avatar {
+            formats
+          }
         }
       }
     `,

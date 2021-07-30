@@ -5,7 +5,14 @@ module.exports = {
   purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      brightness: {
+        '05': '.05',
+      },
+      height: {
+        128: '32rem',
+      },
+    },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',
@@ -14,9 +21,6 @@ module.exports = {
       gray: colors.trueGray,
       orange: colors.orange,
       amber: colors.amber,
-    },
-    height: {
-      128: '32rem',
     },
     fontFamily: {
       sans: ['Proxima Nova'],

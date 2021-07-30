@@ -6,12 +6,27 @@ import { gql } from '@apollo/client';
 import ReactPlayer from 'react-player/youtube';
 import { getYoutubeThumbnail } from '@/libs/get-youtube-thumbnails';
 import { getMusicVideoUrl, getVideoAddTranslationRoute } from '@/libs/get-urls';
+import { getImageMetadata } from '@/libs/get-image-url';
 
 export default function Profile_Detail__Page({ profile }) {
   return (
     <Layout title={profile.artName}>
-      <h1>{profile.artName}</h1>
-
+      <div className="flex max-w-3xl mx-auto gap-8">
+        <div className="max-w-4 max-h-4">
+          {profile.avatar ? (
+            <img
+              className="object-cover max-h-36 max-w-36"
+              src={getImageMetadata(profile.avatar, 'small').url}
+              alt={`Avatar của ${profile.artName}`}
+              width="156px"
+              height="156px"
+            />
+          ) : (
+            <div></div>
+          )}
+        </div>
+        <h1>{profile.artName}</h1>
+      </div>
       {profile.originalMusicVideos.length > 0 && (
         <>
           <p className="my-4">Music videos</p>

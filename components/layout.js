@@ -1,10 +1,45 @@
 import { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import classNames from '@/libs/classnames';
+import { RiSearchLine } from 'react-icons/ri';
+import { Switch } from '@headlessui/react';
+import useDarkMode from '@/hooks/use-dark-mode';
+
+/* import icons */
+import {
+  RiMvLine,
+  RiMvFill,
+  RiUserSmileLine,
+  RiUserSmileFill,
+  RiFilmLine,
+  RiFilmFill,
+} from 'react-icons/ri';
+
+const DiscoveryNavLink = ({ href, lineIcon, fillIcon, isActive, label }) => {
+  return (
+    <Link href={href}>
+      <a
+        className={classNames(
+          isActive ? 'bg-gray-200 dark:bg-gray-700' : '',
+          'flex gap-4 py-2.5 px-4 hover:bg-gray-200 dark:hover:bg-gray-800 rounded'
+        )}
+      >
+        {isActive ? fillIcon : lineIcon}
+        <span>{label}</span>
+      </a>
+    </Link>
+  );
+};
 
 export default function Layout({ title, description, keywords, children }) {
   const [openedMenu, setOpenedMenu] = useState(false);
+  const [enabled, setEnabled] = useState(false);
+  const [colorTheme, setColorTheme] = useDarkMode();
+
+  const router = useRouter();
+  const { asPath } = router;
 
   function openMenuBtnHandler(e) {
     setOpenedMenu(!openedMenu);
@@ -50,80 +85,78 @@ export default function Layout({ title, description, keywords, children }) {
         <div
           className={classNames(
             !openedMenu ? '-translate-x-full' : null,
-            'bg-gray-50 dark:bg-gray-800 w-64 space-y-4 absolute z-50 inset-y-0 left-0 transform transition duration-200 ease-in-out lg:relative lg:translate-x-0'
+            'bg-gray-50 dark:bg-gray-900 dark:border-r-2 dark:border-gray-800 w-64 space-y-4 absolute z-50 inset-y-0 left-0 transform transition duration-200 ease-in-out lg:relative lg:translate-x-0'
           )}
         >
           <div className="sticky top-0 px-2 py-6 ">
             <Link href="/">
               <a className="flex items-center space-x-2 px-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="black"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
-                </svg>
-                <span className="text-xl font-bold">CNNT</span>
+                <span className="text-xl font-bold">Chủ Nhật Nhạc Thái</span>
               </a>
             </Link>
-            {/* <nav>
-            <a href="#" className="block py-2.5 px-4  dark:hover:bg-gray-700 rounded">
-              Góc tìm hiểu
-            </a>
-            <a href="#" className="block py-2.5 px-4 dark:hover:bg-gray-700 rounded">
-              Góc khám phá
-            </a>
-            <a href="#" className="block py-2.5 px-4 dark:hover:bg-gray-700 rounded">
-              Góc phim ngắn
-            </a>
-            <a href="#" className="block py-2.5 px-4 dark:hover:bg-gray-700 rounded">
-              Góc giới thiệu phim
-            </a>
-          </nav> */}
             <p className="text-sm px-4 pt-3 opacity-70">Khám phá</p>
             <nav>
-              <Link href="/music-videos">
-                <a
-                  href="#"
-                  className="block py-2.5 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-                >
-                  Music videos
-                </a>
-              </Link>
-              <Link href="/profiles">
-                <a
-                  href="#"
-                  className="block py-2.5 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-                >
-                  Profiles
-                </a>
-              </Link>
-              <a
-                href="#"
-                className="block py-2.5 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-              >
-                Hãng thu âm
-              </a>
-              <a
-                href="#"
-                className="block py-2.5 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-              >
-                Playlist
-              </a>
+              <DiscoveryNavLink
+                href="/music-videos"
+                label="Music Videos"
+                lineIcon={<RiMvLine size={24} />}
+                fillIcon={<RiMvFill size={24} />}
+                isActive={asPath.startsWith('/music-videos')}
+              />
+              <DiscoveryNavLink
+                href="/profiles"
+                label="Profiles"
+                lineIcon={<RiUserSmileLine size={24} />}
+                fillIcon={<RiUserSmileFill size={24} />}
+                isActive={asPath.startsWith('/profiles')}
+              />
+              <DiscoveryNavLink
+                href="/short-films"
+                label="Phim ngắn"
+                lineIcon={<RiFilmLine size={24} />}
+                fillIcon={<RiFilmFill size={24} />}
+                isActive={asPath.startsWith('/short-films')}
+              />
             </nav>
           </div>
         </div>
 
         {/* content */}
         <div className="flex-1 divide-y dark:divide-gray-800">
-          <div className="hidden md:block px-8 py-4">Placeholder</div>
+          <div className="hidden md:flex md:justify-between md:items-center px-24 py-3">
+            <form className="flex rounded-md">
+              <input
+                className="border-2 border-gray-200 dark:border-gray-800 rounded-l-md w-96 px-3 py-1 text-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                type="search"
+              />
+              <button className="flex items-center justify-center h-full px-6 py-2 bg-gray-200 dark:bg-gray-700 rounded-r-md">
+                <RiSearchLine size={18} />
+              </button>
+            </form>
+            <div>
+              <div className="flex items-center gap-2">
+                <span>Chế độ tối</span>
+                <Switch
+                  checked={colorTheme === 'light' ? true : false}
+                  onChange={() =>
+                    colorTheme === 'light'
+                      ? setColorTheme('dark')
+                      : setColorTheme('light')
+                  }
+                  className={`${
+                    colorTheme === 'light' ? 'bg-gray-200' : 'bg-gray-600'
+                  } relative inline-flex items-center h-6 rounded-full w-11`}
+                >
+                  <span className="sr-only">Chế độ tối</span>
+                  <span
+                    className={`${
+                      colorTheme === 'light' ? 'translate-x-6' : 'translate-x-1'
+                    } inline-block w-4 h-4 transform bg-white rounded-full`}
+                  />
+                </Switch>
+              </div>
+            </div>
+          </div>
           <div className="px-4 md:px-12 lg:px-24 py-8 md:py-12">{children}</div>
         </div>
       </div>
