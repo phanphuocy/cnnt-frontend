@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -6,6 +6,13 @@ import classNames from '@/libs/classnames';
 import { RiSearchLine } from 'react-icons/ri';
 import { Switch } from '@headlessui/react';
 import useDarkMode from '@/hooks/use-dark-mode';
+
+/* import contexts */
+import AuthContext from '@/contexts/AuthContext';
+
+/* import toast container, for once */
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 /* import icons */
 import {
@@ -34,6 +41,7 @@ const DiscoveryNavLink = ({ href, lineIcon, fillIcon, isActive, label }) => {
 };
 
 export default function Layout({ title, description, keywords, children }) {
+  /* handle display */
   const [openedMenu, setOpenedMenu] = useState(false);
   const [enabled, setEnabled] = useState(false);
   const [colorTheme, setColorTheme] = useDarkMode();
@@ -45,6 +53,9 @@ export default function Layout({ title, description, keywords, children }) {
     setOpenedMenu(!openedMenu);
   }
 
+  /* handle logic */
+  const { user, logout } = useContext(AuthContext);
+
   return (
     <>
       <Head>
@@ -52,6 +63,7 @@ export default function Layout({ title, description, keywords, children }) {
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
       </Head>
+      <ToastContainer position="bottom-center" />
       <div className="relative min-h-screen md:flex dark:bg-gray-900 dark:text-white ">
         {/* mobile menu bar */}
         <div className="dark:bg-gray-800 p-4 flex items-center justify-between md:hidden">
@@ -133,7 +145,7 @@ export default function Layout({ title, description, keywords, children }) {
                 <RiSearchLine size={18} />
               </button>
             </form>
-            <div>
+            <div className="flex gap-4">
               <div className="flex items-center gap-2">
                 <span>Chế độ tối</span>
                 <Switch
@@ -154,6 +166,24 @@ export default function Layout({ title, description, keywords, children }) {
                     } inline-block w-4 h-4 transform bg-white rounded-full`}
                   />
                 </Switch>
+              </div>
+              <div>
+                {user ? (
+                  /* if is logged in in */
+                  <button
+                    className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-200 rounded-md px-3 py-2"
+                    onClick={() => logout()}
+                  >
+                    Đăng xuất
+                  </button>
+                ) : (
+                  /* if not logged in */
+                  <Link href="/member/login">
+                    <a className="bg-orange-500 border-bottom border-b-orange-600 px-3 py-2 rounded-md shadow-sm font-bold text-white">
+                      Đăng nhập
+                    </a>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

@@ -15,16 +15,20 @@ export default function MusicVideoDetailPage({ video }) {
   return (
     <Layout
       title={`${video.englishTitle} ${
-        video.thaiTitle === video.englishTitle ? video.thaiTitle : ''
-      } lyrics, lời dịch`}
+        video.thaiTitle !== video.englishTitle ? video.thaiTitle : ''
+      } ${
+        video.transliteration ? ' ' + '(' + video.transliteration + ')' : ''
+      } lyrics, lời dịch, ý nghĩa bài hát.`}
     >
-      <h1 className="font-bold text-2xl my-4">
-        {video.englishTitle} {video.thaiTitle}
-        {video.transliteration ? ' ' + '(' + video.transliteration + ')' : ''}
-      </h1>
       <div className="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-5 items-stretch gap-8 md:gap-8 lg:gap-16">
         <div className="lg:col-span-3 self-stretch">
           <div className="sticky top-1">
+            <h1 className="font-bold text-2xl my-4 md:pt-4">
+              {video.englishTitle} {video.thaiTitle}
+              {video.transliteration
+                ? ' ' + '(' + video.transliteration + ')'
+                : ''}
+            </h1>
             <div className="relative bg-gray-100 dark:bg-gray-900 md:p-4 dark:p-0 lg:p-6 rounded-md h-56 md:h-48 lg:h-128">
               <ReactPlayer
                 className="relative z-10 overflow-hidden rounded-md"
@@ -152,11 +156,15 @@ export default function MusicVideoDetailPage({ video }) {
           </div>
         </div>
         <article className="lg:col-span-2 dark:text-gray-200">
-          {video.lyrics.split('\n').map((paragraph) => {
+          {video.lyrics.split('\n').map((paragraph, i) => {
             if (paragraph === '') {
-              return <div className="my-5"></div>;
+              return <div key={i} className="my-5"></div>;
             } else {
-              return <p className="lg:text-lg">{paragraph}</p>;
+              return (
+                <p key={i} className="lg:text-lg">
+                  {paragraph}
+                </p>
+              );
             }
           })}
         </article>
