@@ -8,7 +8,7 @@ import { getYoutubeThumbnail } from '@/libs/get-youtube-thumbnails';
 
 export default function MusicVideosPage({ musicVideos }) {
   return (
-    <Layout title="Music Videos">
+    <Layout title="Music Videos" useImageBanner={true}>
       <ul className="md:grid md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
         {musicVideos.map((item) => (
           <li className="pb-4" key={item.id}>

@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 
 export default function Home() {
   return (
-    <Layout title="Trang chủ">
+    <Layout title="Trang chủ" useImageBanner={true}>
       <h1>Trang chủ</h1>
     </Layout>
   );

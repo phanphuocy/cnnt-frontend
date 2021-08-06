@@ -10,22 +10,29 @@ import { getImageMetadata } from '@/libs/get-image-url';
 
 export default function Profile_Detail__Page({ profile }) {
   return (
-    <Layout title={profile.artName}>
-      <div className="flex max-w-3xl mx-auto gap-8">
-        <div className="max-w-4 max-h-4">
+    <Layout
+      title={profile.artName}
+      useImageBanner={profile.backdrop}
+      imageBanner={profile.backdrop}
+    >
+      <div className="flex max-w-4xl mx-auto mb-12 gap-24">
+        <div className="w-48 h-48">
           {profile.avatar ? (
             <img
-              className="object-cover max-h-36 max-w-36"
+              className="rounded-full"
               src={getImageMetadata(profile.avatar, 'small').url}
               alt={`Avatar của ${profile.artName}`}
-              width="156px"
-              height="156px"
+              width="100%"
+              height="100%"
             />
           ) : (
             <div></div>
           )}
         </div>
-        <h1>{profile.artName}</h1>
+        <div className="md:py-4">
+          <h1 className="font-bold text-2xl">{profile.artName}</h1>
+          <p>{profile.description && profile.description}</p>
+        </div>
       </div>
       {profile.originalMusicVideos.length > 0 && (
         <>

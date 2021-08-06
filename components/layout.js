@@ -6,6 +6,8 @@ import classNames from '@/libs/classnames';
 import { RiSearchLine } from 'react-icons/ri';
 import { Switch } from '@headlessui/react';
 import useDarkMode from '@/hooks/use-dark-mode';
+import cn from '@/libs/classnames';
+import { getImageLargestAvailable } from '@/libs/get-image-largest-available';
 
 /* import contexts */
 import AuthContext from '@/contexts/AuthContext';
@@ -40,7 +42,14 @@ const DiscoveryNavLink = ({ href, lineIcon, fillIcon, isActive, label }) => {
   );
 };
 
-export default function Layout({ title, description, keywords, children }) {
+export default function Layout({
+  title,
+  description,
+  keywords,
+  children,
+  useImageBanner,
+  imageBanner,
+}) {
   /* handle display */
   const [openedMenu, setOpenedMenu] = useState(false);
   const [enabled, setEnabled] = useState(false);
@@ -134,8 +143,26 @@ export default function Layout({ title, description, keywords, children }) {
         </div>
 
         {/* content */}
-        <div className="flex-1 divide-y dark:divide-gray-800">
-          <div className="hidden md:flex md:justify-between md:items-center px-24 py-3">
+        <div className="relative flex-1 divide-y dark:divide-gray-800">
+          {useImageBanner && (
+            <img
+              className="dark:filter dark:brightness-75"
+              src={
+                imageBanner
+                  ? getImageLargestAvailable(imageBanner).url
+                  : 'https://dummyimage.com/1920x500/e09d89/0a0a0a'
+              }
+              alt={`${title} banner image`}
+              width="100%"
+              height="auto"
+            />
+          )}
+          <div
+            className={cn(
+              useImageBanner ? 'absolute top-0 left-0 w-full' : '',
+              'hidden md:flex md:justify-between md:items-center px-24 py-3'
+            )}
+          >
             <form className="flex rounded-md">
               <input
                 className="border-2 border-gray-200 dark:border-gray-800 rounded-l-md w-96 px-3 py-1 text-gray-700 dark:bg-gray-800 dark:text-gray-200"
